@@ -33,6 +33,9 @@ const {
 // < 16
 
 function exponencial(exp) {
+    cb = function (p){
+        return p**exp;
+    }
 
 }
 
@@ -71,6 +74,7 @@ function exponencial(exp) {
 
 function direcciones(laberinto) {
 
+
 }
 
 
@@ -88,6 +92,17 @@ function direcciones(laberinto) {
 // deepEqualArrays([0,1,[[0,1,2],1,2]], [0,1,[[0,1,2],1,2]]) => true
 
 function deepEqualArrays(arr1, arr2) {
+
+    if(arr1.length !== arr2.length) return false;
+
+    for(let i=0; i<arr1.length; i++) {
+        if(typeof arr1[i] !== 'object' || typeof arr1[i] !== 'array'){
+            if (arr1[i] != arr2[i]) return false;
+            else return true;
+        }
+        else return deepEqualArrays(arr1[i],arr2[i]);
+        
+    }
 
 }
 
@@ -139,12 +154,21 @@ OrderedLinkedList.prototype.print = function(){
 // < 'head --> 5 --> 3 --> 1 --> null'
 //               4
 OrderedLinkedList.prototype.add = function(val){
-    
+    let current = this.head;
+    while(current){
+        if(val> current.value){ // val must put before current.value
+            let node = new Node(current.value); // node to insert. Copy the current.value
+            node.next = current.next; // the node point to the next in the list
+            current.next = node; // change de next current to the node
+            current.value = val; // finaly replace the nuew value
+        }
+        current = current.next;
+    }
 }
 
 
 // EJERCICIO 5
-// Crea el metodo 'removeHigher' que deve devolver el valor mas alto de la linked list 
+// Crea el metodo 'removeHigher' que debe devolver el valor mas alto de la linked list 
 // removiendo su nodo corresponidente:
 // Ejemplo:
 // > LL.print()
@@ -159,6 +183,12 @@ OrderedLinkedList.prototype.add = function(val){
 // < null
 
 OrderedLinkedList.prototype.removeHigher = function(){
+    let higherValue = this.head.value; // the head must be the heiger in an ordered linked list
+    let head = this.head.next;
+
+    this.head = head;
+
+    return higherValue;
     
 }
 
@@ -179,6 +209,19 @@ OrderedLinkedList.prototype.removeHigher = function(){
 // < null
 
 OrderedLinkedList.prototype.removeLower = function(){
+
+    let current = this.head;
+    let lower;
+    while(current){
+        if(!current.next){
+            lower = current.value;
+            current.value = null;
+        }
+        current = current.next;
+    }
+
+    return lower;
+
     
 }
 
